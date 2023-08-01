@@ -8,7 +8,7 @@ export default function AllPlayers() {
   useEffect(() => {
     async function PlayersFetch() {
       try {
-        const data = await setPlayers(fetchPlayers);
+        const data = await fetchPlayers();
         setPlayers(data);
       } catch (error) {
         setError(error);
@@ -19,7 +19,21 @@ export default function AllPlayers() {
 
   return (
     <>
-      <h1>{players}</h1>
+      <h1>players</h1>
+      {console.log(players)}
+      <div id="players-cont">
+        {players &&
+          players.map((player) => (
+            <div key={player.id} className="player">
+              <div className="img-cont">
+                <img src={`${player.imageUrl}`} className="player-img" />
+              </div>
+              <h3>{player.name}</h3>
+              <p>{player.status}</p>
+            </div>
+          ))}
+      </div>
+
       {error && <p>{error}</p>}
     </>
   );

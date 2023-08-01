@@ -7,7 +7,6 @@ export default async function fetchPlayers() {
     const response = await fetch(PLAYERS_API_URL);
     const data = await response.json();
     return data.data.players;
-    // console.log(players);
   } catch (error) {
     console.error("Trouble fetching players: ", error);
   }
