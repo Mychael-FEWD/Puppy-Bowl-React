@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchPlayers, fetchSinglePlayer } from "../API/index";
+import { fetchPlayers, deletePlayer } from "../API/index";
 import { useNavigate } from "react-router-dom";
 
-export default function AllPlayers({ singlePlayer, onSetSinglePlayer }) {
+export default function AllPlayers() {
   const [players, setPlayers] = useState([]);
   const [error, setError] = useState(null);
 
@@ -12,24 +12,20 @@ export default function AllPlayers({ singlePlayer, onSetSinglePlayer }) {
     async function PlayersFetch() {
       try {
         const data = await fetchPlayers();
-        setPlayers(data);
+        return setPlayers(data);
       } catch (error) {
         setError(error);
       }
     }
     PlayersFetch();
-  }, []);
+  }, [handleDelete]);
 
   function handleClick(playerId) {
-    async function fetchPlayer() {
-      try {
-        const player = await fetchSinglePlayer(playerId);
-        onSetSinglePlayer(player);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchPlayer();
+    navigate(`/players/${playerId}`);
+  }
+
+  async function handleDelete(playerId) {
+    await deletePlayer(playerId);
   }
 
   function upperCaseName(string) {
@@ -38,9 +34,8 @@ export default function AllPlayers({ singlePlayer, onSetSinglePlayer }) {
   }
 
   return (
-    <>
-      <h1>All Players</h1>
-      {console.log(players)}
+    <section>
+      {error && <p>{error}</p>}
       <div id="players-cont">
         {players &&
           players.map((player) => (
@@ -48,21 +43,32 @@ export default function AllPlayers({ singlePlayer, onSetSinglePlayer }) {
               <div className="img-cont">
                 <img src={player.imageUrl} className="player-img" />
               </div>
-              <h3>{upperCaseName(player.name)}</h3>
-              <p>{player.status}</p>
-              <button
-                onClick={() => {
-                  navigate(`/players/${player.id}`);
-                  handleClick(player.id);
-                }}
-              >
-                Details
-              </button>
+              <div className="content-cont">
+                <div className="flex player-name-status">
+                  <h3>{upperCaseName(player.name)}</h3>
+                  <p>{upperCaseName(player.status)}</p>
+                </div>
+                <div className="flex player-buttons">
+                  <button
+                    onClick={() => {
+                      handleClick(player.id);
+                    }}
+                  >
+                    Details
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => {
+                      handleDelete(player.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
       </div>
-
-      {error && <p>{error}</p>}
-    </>
+    </section>
   );
 }
