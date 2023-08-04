@@ -18,10 +18,43 @@ export async function fetchSinglePlayer(playerId) {
   try {
     const response = await fetch(`${PLAYERS_API_URL}/${playerId}`);
     const data = await response.json();
-    console.log(data.data.player);
     return data.data.player;
   } catch (error) {
     console.error(error);
   }
 }
-// fetchSinglePlayer(10733);
+
+export async function addNewPlayer(name, breed, status, imageUrl, teamId) {
+  try {
+    const response = await fetch(PLAYERS_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: `${name}`,
+        breed: `${breed}`,
+        status: `${status}`,
+        imageUrl: `${imageUrl}`,
+        teamId: `${teamId}`,
+      }),
+    });
+    console.log("Status is: ", response.status);
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function deletePlayer(playerId) {
+  try {
+    const response = await fetch(`${PLAYERS_API_URL}/${playerId}`, {
+      method: "DELETE",
+    });
+    const result = await response.json();
+    console.log(result);
+  } catch (err) {
+    console.error(err);
+  }
+}
