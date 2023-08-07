@@ -50,6 +50,7 @@ export default function AllPlayers() {
                 </div>
                 <div className="flex player-buttons">
                   <button
+                    className="details-button"
                     onClick={() => {
                       handleClick(player.id);
                     }}
