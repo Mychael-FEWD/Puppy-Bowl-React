@@ -13,7 +13,12 @@ export default function SearchBar({ query, onSetQuery, players }) {
   return (
     <div id="search-bar">
       <form>
-        <input type="search" value={query.search} onChange={handleChange} />
+        <input
+          type="search"
+          value={query.search}
+          onChange={handleChange}
+          placeholder="Search..."
+        />
       </form>
     </div>
   );
